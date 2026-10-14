@@ -15,6 +15,7 @@ import type { AppContext } from '../context.js';
 import { AssetRepository, ProjectRepository } from '../db/repositories.js';
 import { badRequest, HttpError, notFound } from '../http/errors.js';
 import { idParam, parseWith } from '../http/validation.js';
+import { createDemoProject } from '../demo.js';
 import { renderProjectThumbnail } from '../render/still.js';
 
 const CreateProjectBody = z.object({
@@ -61,6 +62,12 @@ export function projectRoutes(app: FastifyInstance, ctx: AppContext): void {
       backgroundColor: body.backgroundColor ?? '#000000',
     });
     const record = ctx.projects.create(createId('prj'), body.name, doc);
+    reply.status(201);
+    return ProjectRepository.toDTO(record);
+  });
+
+  app.post('/api/demo', async (_request, reply) => {
+    const record = await createDemoProject(ctx);
     reply.status(201);
     return ProjectRepository.toDTO(record);
   });

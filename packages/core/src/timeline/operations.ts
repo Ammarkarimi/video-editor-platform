@@ -49,6 +49,14 @@ import {
 /** Shortest clip the editor allows (seconds). */
 export const MIN_CLIP_DURATION = 1 / 30;
 
+/**
+ * Deep-copies a clip. Clips are plain JSON, and a JSON round trip (unlike `structuredClone`) also
+ * works on Immer draft proxies, which is what the editor passes in.
+ */
+export function cloneClip<T extends Clip>(clip: T): T {
+  return JSON.parse(JSON.stringify(clip)) as T;
+}
+
 function sortTrack(track: Track): void {
   track.clips.sort((a, b) => a.start - b.start);
 }
@@ -292,7 +300,7 @@ export function splitClip(doc: ProjectDoc, clipId: string, time: number): string
     return null;
 
   const offset = time - clip.start;
-  const right = structuredClone(clip) as Clip;
+  const right = cloneClip(clip);
   right.id = createId('clp');
   right.start = time;
   right.duration = end - time;
@@ -343,7 +351,7 @@ export function duplicateClips(doc: ProjectDoc, clipIds: Iterable<string>): stri
     .filter((l): l is NonNullable<typeof l> => !!l)
     .sort((a, b) => a.clip.start - b.clip.start);
   for (const loc of locs) {
-    const copy = structuredClone(loc.clip) as Clip;
+    const copy = cloneClip(loc.clip);
     copy.id = createId('clp');
     copy.start = clipEnd(loc.clip);
     if (isVisualClip(copy)) copy.transitionIn = null;
@@ -365,7 +373,7 @@ export function copyClips(
   if (locs.length === 0) return [];
   const origin = Math.min(...locs.map((l) => l.clip.start));
   return locs.map((l) => ({
-    clip: structuredClone(l.clip) as Clip,
+    clip: cloneClip(l.clip),
     trackId: l.track.id,
     offset: l.clip.start - origin,
   }));
@@ -378,7 +386,7 @@ export function pasteClips(
 ): string[] {
   const created: string[] = [];
   for (const item of items) {
-    const copy = structuredClone(item.clip) as Clip;
+    const copy = cloneClip(item.clip);
     copy.id = createId('clp');
     copy.start = Math.max(0, time + item.offset);
     if (isVisualClip(copy)) copy.transitionIn = null;

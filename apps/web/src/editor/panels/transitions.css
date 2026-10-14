@@ -1,0 +1,244 @@
+/* Mini previews for the transitions library (animate on hover). */
+.tp-a {
+  background: linear-gradient(135deg, #f97316, #db2777);
+}
+.tp-b {
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  animation-duration: 1.6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-play-state: paused;
+  animation-delay: -0.8s;
+}
+button:hover .tp-b {
+  animation-play-state: running;
+  animation-delay: 0s;
+}
+
+.tp-fade {
+  animation-name: tp-fade;
+}
+@keyframes tp-fade {
+  0%,
+  15% {
+    opacity: 0;
+  }
+  85%,
+  100% {
+    opacity: 1;
+  }
+}
+
+.tp-dip,
+.tp-dip-white {
+  animation-name: tp-fade;
+  box-shadow: inset 0 0 0 999px transparent;
+}
+button:hover .tp-dip {
+  animation-name: tp-dip;
+}
+button:hover .tp-dip-white {
+  animation-name: tp-dip-white;
+}
+@keyframes tp-dip {
+  0%,
+  10% {
+    opacity: 0;
+    filter: brightness(0);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(0);
+  }
+  90%,
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+@keyframes tp-dip-white {
+  0%,
+  10% {
+    opacity: 0;
+    filter: brightness(1) contrast(0) brightness(3);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1) contrast(0) brightness(3);
+  }
+  90%,
+  100% {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+.tp-wipe-left {
+  animation-name: tp-wipe-left;
+}
+@keyframes tp-wipe-left {
+  0%,
+  10% {
+    clip-path: inset(0 0 0 100%);
+  }
+  90%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.tp-wipe-right {
+  animation-name: tp-wipe-right;
+}
+@keyframes tp-wipe-right {
+  0%,
+  10% {
+    clip-path: inset(0 100% 0 0);
+  }
+  90%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.tp-wipe-up {
+  animation-name: tp-wipe-up;
+}
+@keyframes tp-wipe-up {
+  0%,
+  10% {
+    clip-path: inset(100% 0 0 0);
+  }
+  90%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.tp-wipe-down {
+  animation-name: tp-wipe-down;
+}
+@keyframes tp-wipe-down {
+  0%,
+  10% {
+    clip-path: inset(0 0 100% 0);
+  }
+  90%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.tp-slide-left {
+  animation-name: tp-slide-left;
+}
+@keyframes tp-slide-left {
+  0%,
+  10% {
+    transform: translateX(100%);
+  }
+  90%,
+  100% {
+    transform: translateX(0);
+  }
+}
+.tp-slide-right {
+  animation-name: tp-slide-right;
+}
+@keyframes tp-slide-right {
+  0%,
+  10% {
+    transform: translateX(-100%);
+  }
+  90%,
+  100% {
+    transform: translateX(0);
+  }
+}
+.tp-slide-up {
+  animation-name: tp-slide-up;
+}
+@keyframes tp-slide-up {
+  0%,
+  10% {
+    transform: translateY(100%);
+  }
+  90%,
+  100% {
+    transform: translateY(0);
+  }
+}
+.tp-slide-down {
+  animation-name: tp-slide-down;
+}
+@keyframes tp-slide-down {
+  0%,
+  10% {
+    transform: translateY(-100%);
+  }
+  90%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.tp-circle-open {
+  animation-name: tp-circle-open;
+}
+@keyframes tp-circle-open {
+  0%,
+  10% {
+    clip-path: circle(0% at 50% 50%);
+  }
+  90%,
+  100% {
+    clip-path: circle(75% at 50% 50%);
+  }
+}
+.tp-circle-close {
+  animation-name: tp-circle-close;
+}
+@keyframes tp-circle-close {
+  0%,
+  10% {
+    clip-path: inset(0 0 0 0 round 0);
+    opacity: 0;
+  }
+  11% {
+    clip-path: inset(45% 45% 45% 45% round 50%);
+    opacity: 1;
+  }
+  90%,
+  100% {
+    clip-path: inset(0 0 0 0 round 0);
+    opacity: 1;
+  }
+}
+
+.tp-zoom {
+  animation-name: tp-zoom;
+}
+@keyframes tp-zoom {
+  0%,
+  10% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  90%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.tp-blur {
+  animation-name: tp-blur;
+}
+@keyframes tp-blur {
+  0%,
+  10% {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  90%,
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}

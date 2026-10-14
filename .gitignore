@@ -31,3 +31,4 @@ npm-debug.log*
 .vscode/*
 !.vscode/extensions.json
 *.swp
+e2e/.fixtures/

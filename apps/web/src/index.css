@@ -1,0 +1,201 @@
+@import 'tailwindcss';
+
+/* The UI uses the same Inter files the renderer bundles. */
+@font-face {
+  font-family: 'Inter';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Inter-400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Inter-700.ttf') format('truetype');
+}
+
+@theme {
+  --color-bg: #0b0d12;
+  --color-panel: #11141b;
+  --color-panel-2: #161a23;
+  --color-panel-3: #1d222d;
+  --color-line: #252b37;
+  --color-line-2: #333b4b;
+  --color-fg: #e7e9ef;
+  --color-muted: #8f97ab;
+  --color-dim: #5f677b;
+  --color-accent: #8b5cf6;
+  --color-accent-hover: #9d75f8;
+  --color-accent-soft: #8b5cf626;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-success: #22c55e;
+
+  --color-clip-video: #5b5bd6;
+  --color-clip-image: #0f9488;
+  --color-clip-text: #c27a12;
+  --color-clip-shape: #c0367a;
+  --color-clip-audio: #13865f;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Roboto Mono', Menlo, monospace;
+
+  --animate-fade-in: fade-in 120ms ease-out;
+  --animate-pop-in: pop-in 140ms ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-2) transparent;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+}
+
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* Range inputs used throughout the inspector. */
+input[type='range'].slider {
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+}
+input[type='range'].slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-accent) 0%,
+    var(--color-accent) var(--fill, 0%),
+    var(--color-line-2) var(--fill, 0%),
+    var(--color-line-2) 100%
+  );
+}
+input[type='range'].slider::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-line-2);
+}
+input[type='range'].slider::-moz-range-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-accent);
+}
+input[type='range'].slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 0 3px #0006;
+}
+input[type='range'].slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+}
+
+input[type='color'].swatch {
+  appearance: none;
+  padding: 0;
+  border: none;
+  background: transparent;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+input[type='color'].swatch::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type='color'].swatch::-webkit-color-swatch {
+  border: 1px solid var(--color-line-2);
+  border-radius: 6px;
+}
+input[type='color'].swatch::-moz-color-swatch {
+  border: 1px solid var(--color-line-2);
+  border-radius: 6px;
+}
+
+/* Checkerboard behind transparent previews. */
+.checker {
+  background-color: #1a1d25;
+  background-image:
+    linear-gradient(45deg, #232733 25%, transparent 25%),
+    linear-gradient(-45deg, #232733 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #232733 75%),
+    linear-gradient(-45deg, transparent 75%, #232733 75%);
+  background-size: 16px 16px;
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0;
+}
+
+/* Striped pattern for transitions on the timeline. */
+.stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    #ffffff26 0,
+    #ffffff26 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}

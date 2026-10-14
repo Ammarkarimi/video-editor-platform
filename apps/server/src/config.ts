@@ -21,6 +21,10 @@ export interface Config {
   renderWorkers: number;
   corsOrigin: string | null;
   logLevel: string;
+  /** Codec of browser preview proxies: H.264/AAC MP4 (default) or VP9/Opus WebM. */
+  proxyCodec: 'h264' | 'vp9';
+  /** Always preview video/audio through proxies (e.g. for browsers without H.264 support). */
+  alwaysProxy: boolean;
 }
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -66,6 +70,8 @@ export function loadConfig(overrides: Partial<Config> = {}): Config {
     renderWorkers: intEnv('RENDER_WORKERS', Math.max(1, Math.min(4, Math.floor(cpus / 2))), 1),
     corsOrigin: process.env.CORS_ORIGIN ?? null,
     logLevel: process.env.LOG_LEVEL ?? 'info',
+    proxyCodec: process.env.PROXY_CODEC === 'vp9' ? 'vp9' : 'h264',
+    alwaysProxy: ['1', 'true', 'yes'].includes((process.env.PROXY_ALWAYS ?? '').toLowerCase()),
     ...overrides,
   };
 }

@@ -76,8 +76,10 @@ export class MediaProcessor {
       this.update(asset.id, { status: 'error', error: message });
       return;
     }
-    const friendly = isBrowserFriendly(analysis);
     const meta = analysis.metadata;
+    // With PROXY_ALWAYS every video/audio file is previewed through a proxy in the configured codec.
+    const forceProxy = this.config.alwaysProxy && analysis.kind !== 'image';
+    const friendly = isBrowserFriendly(analysis) && !forceProxy;
     const oversized =
       analysis.kind !== 'audio' &&
       Math.max(meta.width, meta.height) > (analysis.kind === 'image' ? 4096 : 1920);
@@ -277,50 +279,59 @@ export class MediaProcessor {
     signal: AbortSignal,
   ): Promise<AssetUpdate> {
     const input = this.storage.assetPath(asset.id, asset.fileName);
+    const vp9 = this.config.proxyCodec === 'vp9';
     let fileName: string;
     let args: string[];
     if (analysis.kind === 'video') {
-      fileName = 'proxy.mp4';
-      args = [
-        '-i',
-        input,
-        '-map',
-        '0:v:0',
-        '-map',
-        '0:a:0?',
-        '-vf',
-        `scale=w='min(${PROXY_MAX_EDGE},iw)':h='min(${PROXY_MAX_EDGE},ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,format=yuv420p`,
-        '-c:v',
-        'libx264',
-        '-preset',
-        'veryfast',
-        '-crf',
-        '26',
-        '-g',
-        '30',
-        '-c:a',
-        'aac',
-        '-b:a',
-        '128k',
-        '-ac',
-        '2',
-        '-movflags',
-        '+faststart',
-      ];
+      fileName = vp9 ? 'proxy.webm' : 'proxy.mp4';
+      const scale = `scale=w='min(${PROXY_MAX_EDGE},iw)':h='min(${PROXY_MAX_EDGE},ih)':force_original_aspect_ratio=decrease:force_divisible_by=2,format=yuv420p`;
+      args = ['-i', input, '-map', '0:v:0', '-map', '0:a:0?', '-vf', scale, '-g', '30', '-ac', '2'];
+      args.push(
+        ...(vp9
+          ? [
+              '-c:v',
+              'libvpx-vp9',
+              '-deadline',
+              'realtime',
+              '-cpu-used',
+              '8',
+              '-row-mt',
+              '1',
+              '-b:v',
+              '0',
+              '-crf',
+              '36',
+              '-c:a',
+              'libopus',
+              '-b:a',
+              '96k',
+            ]
+          : [
+              '-c:v',
+              'libx264',
+              '-preset',
+              'veryfast',
+              '-crf',
+              '26',
+              '-c:a',
+              'aac',
+              '-b:a',
+              '128k',
+              '-movflags',
+              '+faststart',
+            ]),
+      );
     } else if (analysis.kind === 'audio') {
-      fileName = 'proxy.m4a';
+      fileName = vp9 ? 'proxy.webm' : 'proxy.m4a';
       args = [
         '-i',
         input,
         '-vn',
-        '-c:a',
-        'aac',
-        '-b:a',
-        '160k',
         '-ac',
         '2',
-        '-movflags',
-        '+faststart',
+        ...(vp9
+          ? ['-c:a', 'libopus', '-b:a', '128k']
+          : ['-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart']),
       ];
     } else {
       fileName = 'proxy.png';

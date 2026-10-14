@@ -6,3 +6,6 @@ test-results
 playwright-report
 assets/fonts
 package-lock.json
+test-results
+playwright-report
+apps/web/e2e/.fixtures
