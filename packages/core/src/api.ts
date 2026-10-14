@@ -27,6 +27,8 @@ export interface AssetMetadata {
 
 export interface FilmstripInfo {
   frames: number;
+  /** Frames per row in the sprite sheet. */
+  columns: number;
   frameWidth: number;
   frameHeight: number;
   /** Seconds of source media between consecutive frames. */
@@ -50,7 +52,8 @@ export interface AssetDTO {
   createdAt: string;
   urls: {
     file: string;
-    preview: string;
+    /** Browser-playable media (proxy or original); null while a proxy is still being made. */
+    preview: string | null;
     thumbnail: string | null;
     filmstrip: string | null;
     waveform: string | null;
