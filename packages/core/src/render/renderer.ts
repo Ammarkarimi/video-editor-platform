@@ -306,7 +306,7 @@ function drawTransition(
     lctx.globalCompositeOperation = 'source-over';
     lctx.clearRect(0, 0, outW, outH);
     lctx.imageSmoothingEnabled = true;
-    lctx.imageSmoothingQuality = 'high';
+    lctx.imageSmoothingQuality = 'medium';
     lctx.setTransform(env.scaleX, 0, 0, env.scaleY, 0, 0);
     drawClip(lctx, clip, time, env, false);
     lctx.restore();
@@ -354,7 +354,7 @@ export function renderFrame(
   ctx.globalCompositeOperation = 'source-over';
   ctx.filter = 'none';
   ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
+  ctx.imageSmoothingQuality = 'medium';
   if (options.transparent) {
     ctx.clearRect(0, 0, options.width, options.height);
   } else {

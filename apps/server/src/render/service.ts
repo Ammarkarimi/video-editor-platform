@@ -331,6 +331,8 @@ export class RenderService {
       }
     }
 
+    const profile = process.env.RENDER_PROFILE === '1';
+    const phaseStart = performance.now();
     try {
       await Promise.all(tasks);
     } catch (err) {
@@ -345,7 +347,18 @@ export class RenderService {
 
     this.update(id, { status: 'finalizing', progress: 0.97 });
     const output = this.outputPath(record);
+    const finalizeStart = performance.now();
     await this.finalize(settings, work, segments, audioFile, output, signal);
+    if (profile) {
+      this.log.info(
+        {
+          frames: totalFrames,
+          renderSeconds: ((finalizeStart - phaseStart) / 1000).toFixed(1),
+          finalizeSeconds: ((performance.now() - finalizeStart) / 1000).toFixed(1),
+        },
+        'render profile',
+      );
+    }
 
     const { size: outputSize } = await stat(output);
     let outputDuration = exactDuration;

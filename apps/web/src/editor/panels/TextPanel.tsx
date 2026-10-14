@@ -8,18 +8,18 @@ import { PanelHeader } from './LeftPanel';
 
 function presetCss(preset: TextPreset): CSSProperties {
   const style = defaultTextStyle(preset.style);
-  const scale = 22 / Math.max(48, style.fontSize);
+  // Map the preset's 1080p font size into a 15–24px preview so cards stay comparable.
+  const size = 15 + 9 * Math.min(1, Math.max(0, (style.fontSize - 48) / 100));
+  const scale = size / style.fontSize;
   const css: CSSProperties = {
     fontFamily: `"${style.fontFamily}", sans-serif`,
     fontWeight: style.fontWeight,
     fontStyle: style.italic ? 'italic' : 'normal',
-    fontSize: Math.max(13, Math.min(26, style.fontSize * scale * 2.2)),
+    fontSize: size,
     color: toCssColor(style.color),
     textTransform: style.uppercase ? 'uppercase' : 'none',
-    lineHeight: 1.15,
+    lineHeight: 1.2,
     letterSpacing: style.letterSpacing * scale,
-    whiteSpace: 'pre-line',
-    textAlign: style.align,
   };
   if (style.strokeWidth > 0)
     css.WebkitTextStroke = `${Math.max(1, style.strokeWidth * scale)}px ${toCssColor(style.strokeColor)}`;

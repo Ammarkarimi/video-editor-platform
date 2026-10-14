@@ -1,0 +1,20 @@
+services:
+  cutroom:
+    build:
+      context: .
+      # Override the base image (e.g. a registry mirror) with: NODE_IMAGE=... docker compose build
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-trixie-slim}
+    image: cutroom:latest
+    ports:
+      - '8080:8080'
+    volumes:
+      - cutroom-data:/data
+    environment:
+      # Parallel processes per export (defaults to half the CPU cores, max 4).
+      RENDER_WORKERS: ${RENDER_WORKERS:-2}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-4096}
+    restart: unless-stopped
+
+volumes:
+  cutroom-data:

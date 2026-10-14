@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "description": "A full-stack, browser-based video editing platform with a multi-track timeline, real-time preview and server-side FFmpeg export.",
-  "license": "MIT",
   "type": "module",
   "workspaces": [
     "packages/*",
@@ -23,7 +22,7 @@
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "npm run test:e2e -w @vep/web",
     "fonts:download": "tsx scripts/download-fonts.ts",
-    "seed": "npm run seed -w @vep/server"
+    "benchmark": "npm run benchmark -w @vep/server --"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

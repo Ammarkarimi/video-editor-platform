@@ -117,7 +117,7 @@ export function Dashboard() {
             <button
               type="button"
               onClick={() => setCreating(true)}
-              className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-line-2 text-muted transition-colors hover:border-accent hover:text-fg"
+              className="flex min-h-[200px] flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-line-2 text-muted transition-colors hover:border-accent hover:text-fg"
             >
               <Plus size={22} />
               <span className="text-[13px] font-medium">New project</span>

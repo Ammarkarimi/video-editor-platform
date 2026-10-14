@@ -95,14 +95,29 @@ export async function renderChunk(
   const abort = () => encoder.kill('SIGKILL');
   signal?.addEventListener('abort', abort, { once: true });
 
+  // RENDER_PROFILE=1 prints where each worker spends its time (decode / draw / readback / encode).
+  const profile =
+    process.env.RENDER_PROFILE === '1' ? { decode: 0, draw: 0, readback: 0, write: 0 } : null;
+  let mark = performance.now();
+  const lap = (key: 'decode' | 'draw' | 'readback' | 'write') => {
+    if (!profile) return;
+    const now = performance.now();
+    profile[key] += now - mark;
+    mark = now;
+  };
+
   try {
     for (let frame = job.frameStart; frame < job.frameEnd; frame++) {
       if (signal?.aborted) throw new AbortError();
       if (encoderError) throw encoderError;
       const time = job.rangeStart + frame / fps;
+      mark = performance.now();
       await host.prepare(time);
+      lap('decode');
       renderFrame(ctx as unknown as Ctx2D, scene, time, host, { width, height });
+      lap('draw');
       const pixels = ctx.getImageData(0, 0, width, height).data;
+      lap('readback');
       const ok = encoder.stdin.write(
         Buffer.from(pixels.buffer, pixels.byteOffset, pixels.byteLength),
       );
@@ -117,7 +132,15 @@ export async function renderChunk(
           encoder.once('close', done);
         });
       }
+      lap('write');
       onProgress(frame - job.frameStart + 1);
+    }
+    if (profile) {
+      const frames = job.frameEnd - job.frameStart;
+      const perFrame = Object.fromEntries(
+        Object.entries(profile).map(([k, v]) => [k, `${(v / frames).toFixed(1)}ms`]),
+      );
+      console.log(`[render-profile] frames ${job.frameStart}-${job.frameEnd}`, perFrame);
     }
     encoder.stdin.end();
     const code = await exited;

@@ -151,7 +151,7 @@ export function Timeline({ height }: { height: number }) {
         },
         { label: 'Cut', icon: <Scissors size={14} />, shortcut: 'Ctrl X', onSelect: cutSelection },
       ];
-      if (clip.type === 'video' || clip.type === 'audio') {
+      if ((clip.type === 'video' || clip.type === 'audio') && lookup(clip.assetId)?.hasAudio) {
         items.push('separator', {
           label: clip.muted ? 'Unmute clip' : 'Mute clip',
           icon: clip.muted ? <Volume2 size={14} /> : <VolumeX size={14} />,
