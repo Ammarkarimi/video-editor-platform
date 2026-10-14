@@ -1,0 +1,8 @@
+node_modules
+dist
+data
+coverage
+test-results
+playwright-report
+assets/fonts
+package-lock.json

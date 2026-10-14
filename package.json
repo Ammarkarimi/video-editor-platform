@@ -1,0 +1,40 @@
+{
+  "name": "video-editor-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A full-stack, browser-based video editing platform with a multi-track timeline, real-time preview and server-side FFmpeg export.",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n server,web -c blue,magenta \"npm run dev -w @vep/server\" \"npm run dev -w @vep/web\"",
+    "build": "npm run build -w @vep/web && npm run build -w @vep/server",
+    "start": "npm run start -w @vep/server",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run test --workspaces --if-present",
+    "test:e2e": "npm run test:e2e -w @vep/web",
+    "fonts:download": "tsx scripts/download-fonts.ts",
+    "seed": "npm run seed -w @vep/server"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.5",
+    "concurrently": "^10.0.6",
+    "eslint": "^10.12.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.2"
+  }
+}
